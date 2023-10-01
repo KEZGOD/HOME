@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# 更新包列表
+sudo apt update
+
+# 安装 cmake, python3-pip 和 screen
+sudo apt install -y cmake python3-pip screen
+
+# 安装 OpenCL 开发包
+sudo apt install ocl-icd-opencl-dev -y
+
+# 克隆 XENGPUMiner 仓库
+git clone https://github.com/shanhaicoder/XENGPUMiner.git 
+
+# 进入 XENGPUMiner 目录
+cd XENGPUMiner/
+
+# 添加执行权限并运行 build.sh
+chmod +x build.sh
+./build.sh -cuda_arch sm_89
+
+# 安装 Python 依赖
+pip3 install -U -r requirements.txt
