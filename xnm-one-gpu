@@ -7,6 +7,11 @@ sudo apt upgrade -y
 # 安装必要的软件包
 sudo apt install -y git cmake make python3-pip screen ocl-icd-opencl-dev
 
+# 创建 default_address.txt 文件并提示用户输入默认挖矿地址
+echo "请输入默认的挖矿地址： "
+read default_address
+echo "$default_address" > default_address.txt
+
 # 克隆 xnm 存储库
 git clone https://github.com/shanhaicoder/XENGPUMiner.git 
 cd XENGPUMiner/
@@ -18,8 +23,15 @@ chmod +x build.sh
 # 安装 Python 依赖
 pip3 install -U -r requirements.txt
 
-# 提示用户输入挖矿地址
-read -p "请输入您的挖矿地址： " mining_address
+# 提示用户是否要更改挖矿地址
+read -p "当前默认挖矿地址为 $default_address。是否要更改？(y/n): " change_address
+if [ "$change_address" = "y" ]; then
+    read -p "请输入新的挖矿地址： " new_address
+    echo "$new_address" > address.txt  # 保存新地址到 address.txt
+    mining_address="$new_address"
+else
+    mining_address="$default_address"
+fi
 
 # 创建一个名为 "miner" 的 screen 会话并运行 Python 挖矿脚本
 screen -S miner -dm python3 miner.py --gpu=true --account="$mining_address"
