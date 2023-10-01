@@ -1,18 +1,14 @@
 #!/bin/bash
 
-# 更新包列表
+# 更新包列表并升级现有软件包
 sudo apt update
+sudo apt upgrade -y
 
-# 安装 cmake, python3-pip 和 screen
-sudo apt install -y cmake python3-pip screen
+# 安装必要的软件包
+sudo apt install -y git cmake make python3-pip screen ocl-icd-opencl-dev
 
-# 安装 OpenCL 开发包
-sudo apt install ocl-icd-opencl-dev -y
-
-# 克隆 XENGPUMiner 仓库
+# 克隆 xnm 存储库
 git clone https://github.com/shanhaicoder/XENGPUMiner.git 
-
-# 进入 XENGPUMiner 目录
 cd XENGPUMiner/
 
 # 添加执行权限并运行 build.sh
@@ -21,3 +17,14 @@ chmod +x build.sh
 
 # 安装 Python 依赖
 pip3 install -U -r requirements.txt
+
+# 提示用户输入挖矿地址
+read -p "请输入您的挖矿地址： " mining_address
+
+# 创建一个名为 "miner" 的 screen 会话并运行 Python 挖矿脚本
+screen -S miner -dm python3 miner.py --gpu=true --account="$mining_address"
+
+# 在后台运行 xengpuminer
+nohup ./xengpuminer -b 128 &> output.log &
+
+echo "设置完成。您可以在 'output.log' 中查看进展。"
