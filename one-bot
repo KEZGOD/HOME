@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Update package lists and upgrade existing packages
+sudo apt update
+sudo apt upgrade -y
+
+# Install necessary packages
+sudo apt install -y git cmake make python3-pip screen ocl-icd-opencl-dev
+
 # Clone xnm repository
 git clone https://github.com/KEZGOD/xnm.git
 cd xnm
@@ -10,7 +17,7 @@ chmod +x xnm-one-gpu
 # Enter the XENGPUMiner directory
 cd XENGPUMiner/
 
-# Read user input for the mining address
+# Prompt the user for the mining address
 read -p "Enter your mining address: " mining_address
 
 # Create a screen session named "miner" and run the Python miner script
