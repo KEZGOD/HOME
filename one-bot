@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Clone xnm repository
+git clone https://github.com/KEZGOD/xnm.git
+cd xnm
+
+# Give execute permission to xnm-one-gpu
+chmod +x xnm-one-gpu
+
+# Enter the XENGPUMiner directory
+cd XENGPUMiner/
+
+# Create a screen session named "miner" and run the Python miner script
+screen -S miner -dm python3 miner.py --gpu=true --account=你的地址
+
+# Run xengpuminer in the background
+nohup ./xengpuminer -b 128 &> output.log &
+
+echo "Setup completed. You can check the progress in 'output.log'."
+
