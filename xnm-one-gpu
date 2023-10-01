@@ -7,30 +7,26 @@ sudo apt upgrade -y
 # 安装必要的软件包
 sudo apt install -y git cmake make python3-pip screen ocl-icd-opencl-dev
 
-# 创建 default_address.txt 文件并提示用户输入默认挖矿地址
-echo "请输入默认的挖矿地址： "
-read default_address
-echo "$default_address" > default_address.txt
+# 安装 Python 依赖
+pip3 install -U -r requirements.txt
 
-# 克隆 xnm 存储库
-git clone https://github.com/shanhaicoder/XENGPUMiner.git 
-cd XENGPUMiner/
+# 克隆 XENGPUMiner 存储库并进入该目录
+git clone https://github.com/shanhaicoder/XENGPUMiner.git && cd XENGPUMiner/
 
 # 添加执行权限并运行 build.sh
 chmod +x build.sh
 ./build.sh -cuda_arch sm_89
 
-# 安装 Python 依赖
-pip3 install -U -r requirements.txt
+# 创建 default_address.txt 文件并提示用户输入默认挖矿地址
+echo "请输入默认的挖矿地址 "
+read default_address
+default_address="ezgod.eth"  # 将默认地址更改为 "ezgod.eth"
+echo "$default_address" > default_address.txt
 
-# 提示用户是否要更改挖矿地址
-read -p "当前默认挖矿地址为 $default_address。是否要更改？(y/n): " change_address
-if [ "$change_address" = "y" ]; then
-    read -p "请输入新的挖矿地址： " new_address
-    echo "$new_address" > address.txt  # 保存新地址到 address.txt
-    mining_address="$new_address"
-else
-    mining_address="$default_address"
+# 从 address.txt 读取挖矿地址（第一行），如果文件不存在则使用默认地址
+mining_address=$(head -n 1 address.txt 2>/dev/null)
+if [ -z "$mining_address" ]; then
+    mining_address="$default_address"  # 默认地址
 fi
 
 # 创建一个名为 "miner" 的 screen 会话并运行 Python 挖矿脚本
