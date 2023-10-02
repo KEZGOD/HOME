@@ -1,23 +1,15 @@
 #!/bin/bash
 
-git clone https://github.com/shanhaicoder/XENGPUMiner.git && cd XENGPUMiner/
-
-sudo apt update
-sudo apt upgrade -y
-
 sudo apt update
 sudo apt upgrade -y
 sudo apt install nano
-
 sudo apt install -y git
 sudo apt install -y cmake
 sudo apt install -y make
 sudo apt install -y python3-pip
 sudo apt install screen
 sudo apt install -y ocl-icd-opencl-dev
-
 pip3 install -U -r requirements.txt
-
 chmod +x build.sh
 ./build.sh -cuda_arch sm_89
 pip3 install -U -r requirements.txt
@@ -43,4 +35,8 @@ Block status:
    - 'screen -r [process_number]'
    - To exit, press 'Ctrl+A+D'
 
-挖矿脚本已启动
+挖矿脚本已启动，使用地址：$mining_address
+
+by EZGOD
+Twitter: https://twitter.com/ezgod_eth"
+
