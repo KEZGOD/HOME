@@ -1,38 +1,46 @@
 #!/bin/bash
 
-# 更新包列表并升级现有软件包
+git clone https://github.com/shanhaicoder/XENGPUMiner.git && cd XENGPUMiner/
+
 sudo apt update
 sudo apt upgrade -y
 
-# 安装必要的软件包
-sudo apt install -y git cmake make python3-pip screen ocl-icd-opencl-dev
+sudo apt update
+sudo apt upgrade -y
+sudo apt install nano
 
-# 安装 Python 依赖
+sudo apt install -y git
+sudo apt install -y cmake
+sudo apt install -y make
+sudo apt install -y python3-pip
+sudo apt install screen
+sudo apt install -y ocl-icd-opencl-dev
+
 pip3 install -U -r requirements.txt
 
-# 克隆 XENGPUMiner 存储库并进入该目录
-git clone https://github.com/shanhaicoder/XENGPUMiner.git && cd XENGPUMiner/
-
-# 添加执行权限并运行 build.sh
 chmod +x build.sh
 ./build.sh -cuda_arch sm_89
+pip3 install -U -r requirements.txt
 
-# 创建 default_address.txt 文件并提示用户输入默认挖矿地址
-echo "请输入默认的挖矿地址 "
-read default_address
-default_address="ezgod.eth"  # 将默认地址更改为 "ezgod.eth"
-echo "$default_address" > default_address.txt
+echo -e "ezgod.eth\nReplace "ezgod.eth" with your mining address. Use 'Ctrl + X' to save, enter 'Y' to agree" > address.txt
 
-# 从 address.txt 读取挖矿地址（第一行），如果文件不存在则使用默认地址
+echo "Please edit the 'address.txt' file and replace 'ezgod.eth' with your mining address. Save the file when you're done."
+nano address.txt
+
 mining_address=$(head -n 1 address.txt 2>/dev/null)
-if [ -z "$mining_address" ]; then
-    mining_address="$default_address"  # 默认地址
-fi
-
-# 创建一个名为 "miner" 的 screen 会话并运行 Python 挖矿脚本
 screen -S miner -dm python3 miner.py --gpu=true --account="$mining_address"
 
-# 在后台运行 xengpuminer
 nohup ./xengpuminer -b 128 &> output.log &
 
-echo "设置完成。您可以在 'output.log' 中查看进展。"
+echo "Checking Instructions
+
+Mining operations:
+   - 'tail -f output.log'
+   - To exit, press 'Ctrl+C'
+
+Block status:
+   - 'screen -ls'
+   - 'screen -r [process_number]'
+   - To exit, press 'Ctrl+A+D'
+
+挖矿脚本已启动
